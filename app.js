@@ -1,49 +1,59 @@
-const express = require('express');
+const express = require("express");
 const app = express();
 const router = express.Router();
-const path = require('path');
+const path = require("path");
 const port = 3000;
-const bodyparser = require('body-parser');
-const MongoClient = require('mongodb').MongoClient;
-const mongourl = "mongodb+srv://CS5610:CS5610@cluster0.wpjqb11.mongodb.net/?retryWrites=true&w=majority";
+const bodyparser = require("body-parser");
+const MongoClient = require("mongodb").MongoClient;
+const mongourl =
+    "mongodb+srv://CS5610:CS5610@cluster0.wpjqb11.mongodb.net/?retryWrites=true&w=majority";
 
 app.use(express.static(__dirname));
 
-const homePageFileName = 'index.html';
-const dashboardFileName = 'dashboard.html';
-const homeurl = path.join(__dirname, 'public', 'index.html');
-const dashurl = path.join(__dirname, 'public', 'dashboard.html');
-const userurl = path.join(__dirname, 'public', 'user.html');
+const homePageFileName = "index.html";
+const dashboardFileName = "dashboard.html";
+const homeurl = path.join(__dirname, "public", "index.html");
+const dashurl = path.join(__dirname, "public", "dashboard.html");
+const userurl = path.join(__dirname, "public", "user.html");
+const loginurl = path.join(__dirname, "public", "login.html");
+const registerurl = path.join(__dirname, "public", "register.html");
 
-MongoClient.connect(mongourl, (err,db)=> {
-    if(err) throw err;
-    console.log('DB connected');
+MongoClient.connect(mongourl, (err, db) => {
+    if (err) throw err;
+    console.log("DB connected");
     db.close();
 });
 
 //Allow us to interact and allow express to use middleware
 //we can get request body content
-app.use(bodyparser.urlencoded({extended:true}));
+app.use(bodyparser.urlencoded({ extended: true }));
 
-app.get('/', (req, res) => {
-    console.log('HomePage');
+app.get("/", (req, res) => {
+    console.log("HomePage");
     res.sendFile(homeurl);
-})
+});
 
+app.get("/login", (req, res) => {
+    res.sendFile(loginurl);
+});
 
-app.get('/dashboard', (req, res) => {
+app.get("/register", (req, res) => {
+    res.sendFile(registerurl);
+});
+
+app.get("/dashboard", (req, res) => {
     res.sendFile(dashurl);
-})
+});
 
-app.post('/dashboard', (req, res) => {
+app.post("/dashboard", (req, res) => {
     console.log(req.body);
     // res.send(`The workout you want to do is: ${req.body.workoutType}` );
-})
+});
 
-app.get('/users/:id', (req, res) => {
+app.get("/users/:id", (req, res) => {
     res.send(`${req.params.id}`);
-})
+});
 
- app.listen(port, () => {
-    console.log(`Serving on port ${port}`)
- })    
+app.listen(port, () => {
+    console.log(`Serving on port ${port}`);
+});
